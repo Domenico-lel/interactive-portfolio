@@ -1,10 +1,33 @@
-function Project({ label, wide }: { label: string; wide?: boolean }) {
+function Project({
+  label,
+  title,
+  href,
+}: {
+  label: string
+  title: string
+  href: string
+}) {
   return (
-    <article className={`project${wide ? ' project--wide' : ''}`}>
+    <article className="project project--wide">
       <span className="project__label">{label}</span>
-      <div className={`card ${wide ? 'card--wide' : 'card--tall'}`}>
-        <div className={`device ${wide ? 'device--tablet' : 'device--phone'}`} />
-      </div>
+      <a className="project__link" href={href} target="_blank" rel="noreferrer">
+        <div className="card card--showcase">
+          <div className="phone">
+            <span className="phone__island" />
+            <video
+              className="phone__screen"
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="/assets/fantacalcio-poster.jpg"
+            >
+              <source src="/assets/fantacalcio-demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        <span className="project__title">{title}</span>
+      </a>
     </article>
   )
 }
@@ -14,9 +37,11 @@ export default function Work() {
     <section className="work" id="work">
       <h2 className="wordmark section-head">Work</h2>
       <div className="grid">
-        <Project label="Project Name" wide />
-        <Project label="Project Name" />
-        <Project label="Project Name" />
+        <Project
+          label="Web App"
+          title="Fantacalcio"
+          href="https://github.com/Domenico-lel/fantacalcio"
+        />
       </div>
     </section>
   )

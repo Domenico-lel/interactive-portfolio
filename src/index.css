@@ -207,6 +207,24 @@ button {
   color: var(--ink-soft);
 }
 
+.project__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease;
+}
+
+.project__link:hover {
+  transform: translateY(-4px);
+}
+
+.project__title {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 600;
+}
+
 .card {
   position: relative;
   display: flex;
@@ -225,37 +243,43 @@ button {
   aspect-ratio: 4 / 5;
 }
 
-/* CSS device mockups (placeholders for real screenshots) */
-.device {
-  background: #fbfbfd;
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.35);
+/* App showcase — real screen recording inside an iPhone frame */
+.card--showcase {
+  padding: clamp(2.25rem, 5vw, 3.75rem) 0;
+}
+
+.phone {
   position: relative;
+  width: min(300px, 62%);
+  aspect-ratio: 9 / 19.5;
+  margin: 0 auto;
+  padding: 11px;
+  background: #0b0b0d;
+  border-radius: 46px;
+  box-shadow:
+    0 34px 70px -28px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 2px #303035;
 }
 
-.device--tablet {
-  width: 46%;
-  aspect-ratio: 4 / 3;
-  border-radius: 22px;
-  border: 10px solid #202127;
+.phone__screen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 36px;
+  display: block;
+  background: #000;
 }
 
-.device--phone {
-  width: 42%;
-  aspect-ratio: 9 / 19;
-  border-radius: 34px;
-  border: 9px solid #202127;
-}
-
-.device--phone::before {
-  content: '';
+.phone__island {
   position: absolute;
-  top: 12px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 34%;
-  height: 7px;
+  width: 30%;
+  height: 20px;
   border-radius: 999px;
-  background: #202127;
+  background: #0b0b0d;
+  z-index: 2;
 }
 
 /* ---------- Bio ---------- */
