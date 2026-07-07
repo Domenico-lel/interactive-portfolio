@@ -11,93 +11,12 @@ interface Compositor {
 }
 
 /**
- * GPU compositor: uploads the packed frame as a texture and lets a fragment
- * shader read colour from the left half and the matte's luminance from the right
- * half, writing it to the alpha channel. No per-pixel JS, so scrubbing stays
- * smooth even on mobile. Returns null if WebGL is unavailable.
+ * Reads the packed frame back and shuffles the matte's luminance into the alpha
+ * channel. A 2D canvas is used deliberately: a WebGL shader is faster but its
+ * output composites unreliably over the page on iOS Safari (the transparent
+ * colour plane leaked as a light veil that washed out the wordmark behind), so
+ * we keep the straight-alpha 2D path the browser handles correctly everywhere.
  */
-function createGLCompositor(canvas: HTMLCanvasElement, video: HTMLVideoElement): Compositor | null {
-  const gl = canvas.getContext('webgl', {
-    premultipliedAlpha: false,
-    alpha: true,
-    antialias: false,
-    depth: false,
-  })
-  if (!gl) return null
-
-  const compile = (type: number, src: string) => {
-    const s = gl.createShader(type)
-    if (!s) return null
-    gl.shaderSource(s, src)
-    gl.compileShader(s)
-    return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null
-  }
-  const vs = compile(
-    gl.VERTEX_SHADER,
-    `attribute vec2 a_pos;
-     varying vec2 v_uv;
-     void main() {
-       v_uv = a_pos * 0.5 + 0.5;
-       gl_Position = vec4(a_pos, 0.0, 1.0);
-     }`,
-  )
-  const fs = compile(
-    gl.FRAGMENT_SHADER,
-    `precision mediump float;
-     varying vec2 v_uv;
-     uniform sampler2D u_tex;
-     void main() {
-       vec3 rgb = texture2D(u_tex, vec2(v_uv.x * 0.5, v_uv.y)).rgb;
-       float a = texture2D(u_tex, vec2(v_uv.x * 0.5 + 0.5, v_uv.y)).r;
-       gl_FragColor = vec4(rgb, a);
-     }`,
-  )
-  if (!vs || !fs) return null
-  const prog = gl.createProgram()
-  if (!prog) return null
-  gl.attachShader(prog, vs)
-  gl.attachShader(prog, fs)
-  gl.linkProgram(prog)
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null
-  gl.useProgram(prog)
-
-  const buf = gl.createBuffer()
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf)
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW)
-  const loc = gl.getAttribLocation(prog, 'a_pos')
-  gl.enableVertexAttribArray(loc)
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
-
-  const tex = gl.createTexture()
-  gl.bindTexture(gl.TEXTURE_2D, tex)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
-  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false)
-  gl.clearColor(0, 0, 0, 0)
-
-  return {
-    draw(w, h) {
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w
-        canvas.height = h
-      }
-      gl.viewport(0, 0, w, h)
-      try {
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video)
-      } catch {
-        return false // frame not decodable yet
-      }
-      gl.clear(gl.COLOR_BUFFER_BIT)
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
-      return true
-    },
-  }
-}
-
-/** CPU fallback: reads the packed frame back and shuffles the matte into alpha. */
 function create2DCompositor(canvas: HTMLCanvasElement, video: HTMLVideoElement): Compositor | null {
   const ctx = canvas.getContext('2d')
   if (!ctx) return null
@@ -151,7 +70,7 @@ export default function Hero() {
     // its right; a shader (or CPU fallback) recombines them so the figurine is
     // genuinely transparent and stands *in front* of the wordmark. Real alpha
     // video isn't portable (iOS can't play alpha WebM/HEVC), hence the matte trick.
-    const compositor = createGLCompositor(canvas, video) ?? create2DCompositor(canvas, video)
+    const compositor = create2DCompositor(canvas, video)
     if (!compositor) return
 
     // Scrubbed, not auto-played: scroll position drives the rotation.
