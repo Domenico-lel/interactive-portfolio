@@ -168,15 +168,20 @@ button {
   height: 104%;
   width: auto;
   pointer-events: none;
-  /* The figurine clip is rendered on a solid --bg (#f2f3f8) background rather than
-     a real alpha channel, because transparent video is unreliable across browsers:
-     iOS Safari can't play alpha WebM and falls back to an opaque MP4, so the box
-     used to cover the wordmark. "darken" blends the clip with the backdrop — its
-     background pixels equal --bg and vanish against the page, while the darker
-     figurine (and any black wordmark letters behind it) show through. This relies
-     on the clip's background matching --bg and the figurine being darker than it;
-     keep both true if either changes. */
-  mix-blend-mode: darken;
+  /* The figurine is a <canvas> that recombines a packed colour+alpha video into a
+     truly transparent frame (see Hero.tsx). It floats in front of the wordmark
+     with the letters visible around it, and renders the same on every browser —
+     no reliance on alpha video, which iOS Safari can't play. */
+}
+
+/* Hidden decode source for .hero__figure. Must stay laid out (not display:none)
+   so the browser keeps decoding and seeking it — iOS won't seek a hidden video. */
+.hero__figure-src {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ---------- Section heading ---------- */
