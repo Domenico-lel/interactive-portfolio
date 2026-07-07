@@ -22,6 +22,11 @@
 html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* The figurine <canvas> is a tall square centred in the hero; its transparent
+     sides extend past the viewport by design. Clip at the root (not just body,
+     whose clip the root scroller ignores) so those sides don't cause a
+     horizontal scroll. clip (vs hidden) keeps the sticky nav working. */
+  overflow-x: clip;
 }
 
 body {
