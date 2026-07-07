@@ -2,13 +2,17 @@ function Project({
   label,
   title,
   href,
+  video,
+  poster,
 }: {
   label: string
   title: string
   href: string
+  video: string
+  poster: string
 }) {
   return (
-    <article className="project project--wide">
+    <article className="project">
       <span className="project__label">{label}</span>
       <a className="project__link" href={href} target="_blank" rel="noreferrer">
         <div className="card card--showcase">
@@ -20,9 +24,9 @@ function Project({
               muted
               loop
               playsInline
-              poster="/assets/fantacalcio-poster.jpg"
+              poster={poster}
             >
-              <source src="/assets/fantacalcio-demo.mp4" type="video/mp4" />
+              <source src={video} type="video/mp4" />
             </video>
           </div>
         </div>
@@ -41,6 +45,15 @@ export default function Work() {
           label="Web App"
           title="Fantacalcio"
           href="https://github.com/Domenico-lel/fantacalcio"
+          video="/assets/fantacalcio-demo.mp4"
+          poster="/assets/fantacalcio-poster.jpg"
+        />
+        <Project
+          label="Web App"
+          title="Prompt Builder"
+          href="https://github.com/Domenico-lel/prompt-builder"
+          video="/assets/prompt-builder-demo.mp4"
+          poster="/assets/prompt-builder-poster.jpg"
         />
       </div>
     </section>
