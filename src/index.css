@@ -174,6 +174,12 @@ button {
      no reliance on alpha video, which iOS Safari can't play. */
 }
 
+/* Transparent poster placeholder, layered exactly over the canvas until the
+   first composited frame fades it out. */
+.hero__figure-poster {
+  transition: opacity 0.2s ease;
+}
+
 /* Hidden decode source for .hero__figure. Must stay laid out (not display:none)
    so the browser keeps decoding and seeking it — iOS won't seek a hidden video. */
 .hero__figure-src {
