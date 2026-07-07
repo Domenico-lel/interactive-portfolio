@@ -10,7 +10,7 @@ export default function Nav() {
         </a>
       </div>
       <a className="nav__name" href="#top">
-        Jay Brown
+        Domenico Lella
       </a>
       <div className="nav__group nav__group--right">
         <a className="pill pill--dark" href="#contact">

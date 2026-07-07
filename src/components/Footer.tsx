@@ -18,7 +18,7 @@ export default function Footer() {
           </a>
         ))}
       </div>
-      <span className="footer__copy">©Jay Brown 2026</span>
+      <span className="footer__copy">©Domenico Lella 2026</span>
     </footer>
   )
 }
