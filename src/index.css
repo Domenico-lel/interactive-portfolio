@@ -9,7 +9,7 @@
   --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --wordmark-weight: 900;
   --neutral-weight: 500;
-  --page-x: clamp(1.25rem, 5vw, 5rem);
+  --page-x: clamp(1rem, 5vw, 5rem);
   --maxw: 1600px;
 }
 
@@ -139,8 +139,9 @@ button {
   align-items: center;
   justify-content: center;
   /* fill the viewport below the nav so the enlarged figurine has room to stand
-     without slipping under the nav or into the WORK heading. */
-  min-height: calc(100vh - 4.5rem);
+     without slipping under the nav or into the WORK heading. svh avoids the
+     mobile-browser address-bar jump that vh causes on iOS/Android. */
+  min-height: calc(100svh - 4.5rem);
   padding: 2rem 0 1rem;
   text-align: center;
 }
@@ -358,35 +359,96 @@ button {
 /* ---------- Responsive ---------- */
 @media (max-width: 720px) {
   .nav {
-    grid-template-columns: auto 1fr;
-    gap: 0.75rem;
+    /* Two rows: brand on top, pills below — keeps every link reachable on
+       mobile without an extra hamburger menu. */
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'name name'
+      'left right';
+    row-gap: 0.6rem;
+    padding: 0.9rem var(--page-x);
   }
   .nav__name {
-    order: -1;
+    grid-area: name;
     text-align: left;
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
   }
   .nav__group--left {
-    display: none;
+    grid-area: left;
+    justify-content: flex-start;
+    gap: 0.5rem;
   }
+  .nav__group--right {
+    grid-area: right;
+  }
+  .pill {
+    height: 2.3rem;
+    padding: 0 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .hero {
+    /* Nav is taller on mobile (two rows) — leave more room so the wordmark
+       and figurine don't collide with the sticky bar. */
+    min-height: calc(100svh - 6.5rem);
+    padding: 1rem 0 0.5rem;
+  }
+
+  .section-head {
+    padding: 2.5rem 0 1.75rem;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }
   .card--tall {
     aspect-ratio: 4 / 4;
   }
-  .device--phone {
-    width: 52%;
+  .card--showcase {
+    padding: 2rem 0;
   }
-  .device--tablet {
-    width: 62%;
+  .phone {
+    width: min(220px, 68%);
   }
+
+  .bio {
+    padding: 3rem 0 2.5rem;
+  }
+  .bio__text {
+    text-align: left;
+  }
+  .bio__cta {
+    height: 3rem;
+    padding: 0 1.6rem;
+  }
+
+  .hello {
+    padding: 2rem 0 3rem;
+  }
+
   .footer {
     grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 2.5rem 0 3rem;
   }
   .footer__copy {
     grid-column: 1 / -1;
     justify-self: start;
     text-align: left;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav__group--left {
+    /* Two ghost pills + one dark pill would wrap on the very narrowest
+       phones (≤360px); drop to just Work on that tier. */
+    gap: 0.35rem;
+  }
+  .pill {
+    padding: 0 0.85rem;
+    font-size: 0.7rem;
   }
 }
