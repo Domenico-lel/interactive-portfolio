@@ -1,5 +1,4 @@
 const socials: { label: string; href: string }[] = [
-  { label: 'Email', href: 'mailto:domenicolella2@gmail.com' },
   { label: 'GitHub', href: 'https://github.com/Domenico-lel' },
   { label: 'LinkedIn', href: '#' },
 ]
