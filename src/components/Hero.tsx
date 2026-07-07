@@ -106,9 +106,12 @@ export default function Hero() {
         <span>Product</span>
         <span>Designer</span>
       </h1>
-      {/* Transparent (alpha) figurine turntable. Its frame is scrubbed by scroll
-          position (see effect above) instead of auto-playing, so scrolling spins
-          the figurine — down one way, up the other. */}
+      {/* Figurine turntable. Its frame is scrubbed by scroll position (see effect
+          above) instead of auto-playing, so scrolling spins the figurine — down one
+          way, up the other. The clip has an opaque --bg background and is made to
+          read as transparent via mix-blend-mode: darken (see .hero__figure); we use
+          a plain H.264 MP4 that every browser can decode, since alpha video isn't
+          portable (notably iOS Safari can't play alpha WebM). */}
       <video
         ref={videoRef}
         className="hero__figure"
@@ -118,7 +121,6 @@ export default function Hero() {
         preload="auto"
         aria-label="3D figurine of Jay Brown that rotates as you scroll"
       >
-        <source src="/assets/figurine-animation.webm" type="video/webm" />
         <source src="/assets/figurine-animation.mp4" type="video/mp4" />
       </video>
     </header>

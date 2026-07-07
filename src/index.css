@@ -168,8 +168,15 @@ button {
   height: 104%;
   width: auto;
   pointer-events: none;
-  /* Transparent alpha video: the figurine floats in front of the wordmark and the
-     letters remain visible around and behind it. */
+  /* The figurine clip is rendered on a solid --bg (#f2f3f8) background rather than
+     a real alpha channel, because transparent video is unreliable across browsers:
+     iOS Safari can't play alpha WebM and falls back to an opaque MP4, so the box
+     used to cover the wordmark. "darken" blends the clip with the backdrop — its
+     background pixels equal --bg and vanish against the page, while the darker
+     figurine (and any black wordmark letters behind it) show through. This relies
+     on the clip's background matching --bg and the figurine being darker than it;
+     keep both true if either changes. */
+  mix-blend-mode: darken;
 }
 
 /* ---------- Section heading ---------- */
