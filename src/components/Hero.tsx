@@ -15,6 +15,29 @@ export default function Hero() {
 
     let target = 0
     let pending = false
+    let primed = false
+
+    // iOS Safari (and some Android browsers) won't paint a frame of a muted,
+    // never-played <video> just from setting currentTime — the poster clears and
+    // nothing renders. Kicking off a muted play() and immediately pausing forces
+    // the decoder to render the first frame, after which scrub seeks paint.
+    const prime = () => {
+      if (primed) return
+      primed = true
+      const p = video.play()
+      if (p && typeof p.then === 'function') {
+        p.then(() => {
+          video.pause()
+          seekToTarget()
+        }).catch(() => {
+          // Autoplay priming blocked — a user gesture (scroll/touch) will retry.
+          primed = false
+        })
+      } else {
+        video.pause()
+        seekToTarget()
+      }
+    }
 
     const seekToTarget = () => {
       if (video.readyState < 1 || !video.duration) return
@@ -42,18 +65,38 @@ export default function Hero() {
       seekToTarget()
     }
 
-    const onScroll = () => update()
+    const onScroll = () => {
+      prime()
+      update()
+    }
+
+    // Retry priming on the first real user gesture in case autoplay was blocked.
+    const onGesture = () => prime()
+
+    const onLoadedMeta = () => {
+      prime()
+      update()
+    }
 
     video.addEventListener('seeked', onSeeked)
-    video.addEventListener('loadedmetadata', update)
+    video.addEventListener('loadedmetadata', onLoadedMeta)
+    // canplay fires once the frame data is actually decodable — a more reliable
+    // point to prime than loadedmetadata on mobile.
+    video.addEventListener('canplay', prime)
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('touchstart', onGesture, { passive: true })
     // set the initial frame once data is ready
-    if (video.readyState >= 1) update()
+    if (video.readyState >= 2) {
+      prime()
+      update()
+    }
 
     return () => {
       video.removeEventListener('seeked', onSeeked)
-      video.removeEventListener('loadedmetadata', update)
+      video.removeEventListener('loadedmetadata', onLoadedMeta)
+      video.removeEventListener('canplay', prime)
       window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('touchstart', onGesture)
     }
   }, [])
 
