@@ -16,8 +16,8 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__mark wordmark" aria-hidden="true">
-        <span>Let&apos;s</span>
-        <span>Talk.</span>
+        <span>Domenico</span>
+        <span>Lella</span>
       </div>
 
       <div className="footer__cols">

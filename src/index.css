@@ -134,12 +134,12 @@ button {
   justify-content: center;
   justify-self: center;
   font-weight: var(--wordmark-weight);
-  font-size: 1.75rem;
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
   line-height: 1;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--ink);
-  padding-right: 0.08em;
+  white-space: nowrap;
 }
 
 /* ---------- Loader ---------- */
@@ -672,7 +672,7 @@ button {
   .nav__mark {
     grid-area: name;
     justify-self: start;
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   .nav__group--left {
     grid-area: left;

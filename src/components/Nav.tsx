@@ -10,7 +10,7 @@ export default function Nav() {
         </a>
       </div>
       <a className="nav__mark" href="#top" aria-label="Domenico Lella — home">
-        <span aria-hidden="true">DL</span>
+        <span aria-hidden="true">Domenico&nbsp;Lella</span>
       </a>
       <div className="nav__group nav__group--right">
         <a className="pill pill--dark" href="#contact">
