@@ -190,8 +190,8 @@ export default function Hero() {
   return (
     <header className="hero" id="top">
       <h1 className="wordmark hero__wordmark">
-        <span>Product</span>
-        <span>Designer</span>
+        <span>AI-NATIVE</span>
+        <span>BUILDER</span>
       </h1>
       {/* Transparent poster shown until the first video frame is composited, so the
           figurine is visible immediately without a flash of empty space. */}
