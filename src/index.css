@@ -128,12 +128,18 @@ button {
   background: #000;
 }
 
-.nav__name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.24em;
+.nav__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  font-weight: var(--wordmark-weight);
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
-  text-align: center;
+  color: var(--ink);
+  white-space: nowrap;
 }
 
 /* ---------- Loader ---------- */
@@ -663,11 +669,10 @@ button {
     row-gap: 0.6rem;
     padding: 0.9rem var(--page-x);
   }
-  .nav__name {
+  .nav__mark {
     grid-area: name;
-    text-align: left;
-    font-size: 0.85rem;
-    letter-spacing: 0.22em;
+    justify-self: start;
+    font-size: 1rem;
   }
   .nav__group--left {
     grid-area: left;
