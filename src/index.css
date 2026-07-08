@@ -531,18 +531,59 @@ button {
 
 .footer__mark {
   /* Echoes the hero wordmark (PRODUCT / DESIGNER) so the page ends on the same
-     typographic note it opened with. */
+     typographic note it opened with. Not a link — it's purely a visual close. */
   font-size: clamp(3rem, 11vw, 9rem);
   color: var(--ink);
-  transition: color 0.2s ease;
+  /* Enable 3D transforms on children (each span tilts on hover for real depth
+     rather than a flat text-shadow trick alone). */
+  perspective: 900px;
+  cursor: default;
 }
 
 .footer__mark span {
   display: block;
+  /* text-shadow layers stack outward to build a chunky extruded slab, and a
+     soft drop-shadow underneath grounds it on the page. Both transition to zero
+     at rest so the type reads clean until you hover. */
+  text-shadow: 0 0 0 var(--dark);
+  transform: translateZ(0) rotateX(0) rotateY(0);
+  transform-origin: 50% 100%;
+  transition:
+    text-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+    color 0.2s ease;
+  will-change: transform, text-shadow;
 }
 
-.footer__mark:hover {
-  color: var(--ink-soft);
+.footer__mark:hover span {
+  /* Eight offset copies of the letterform build a solid extrusion in the same
+     dark ink as the wordmark itself, and a wider translucent shadow floats the
+     block off the page. */
+  text-shadow:
+    1px 1px 0 var(--dark),
+    2px 2px 0 var(--dark),
+    3px 3px 0 var(--dark),
+    4px 4px 0 var(--dark),
+    6px 6px 0 var(--dark),
+    8px 8px 0 var(--dark),
+    10px 10px 0 var(--dark),
+    12px 12px 24px rgba(17, 17, 20, 0.35);
+  transform: translateY(-4px) rotateX(6deg) rotateY(-4deg);
+}
+
+/* Stagger the two lines slightly so the hover reads as one gesture with a
+   little bounce rather than both words snapping at the same instant. */
+.footer__mark:hover span:last-child {
+  transition-delay: 0.05s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__mark span,
+  .footer__mark:hover span {
+    transform: none;
+    text-shadow: none;
+    transition: color 0.2s ease;
+  }
 }
 
 .footer__cols {

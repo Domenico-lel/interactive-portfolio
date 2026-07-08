@@ -1,6 +1,6 @@
 const socials: { label: string; href: string }[] = [
   { label: 'GitHub', href: 'https://github.com/Domenico-lel' },
-  { label: 'LinkedIn', href: '#' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/domenico-lella-26573b2b8' },
 ]
 
 const pages = [
@@ -15,10 +15,10 @@ export default function Footer() {
 
   return (
     <footer className="footer">
-      <a className="footer__mark wordmark" href="#contact" aria-label="Get in touch">
+      <div className="footer__mark wordmark" aria-hidden="true">
         <span>Let&apos;s</span>
         <span>Talk.</span>
-      </a>
+      </div>
 
       <div className="footer__cols">
         <div className="footer__col">
