@@ -55,6 +55,13 @@ export default function Work() {
           video="/assets/prompt-builder-demo.mp4"
           poster="/assets/prompt-builder-poster.jpg"
         />
+        <Project
+          label="Web App"
+          title="Spotify Clone"
+          href="https://github.com/Domenico-lel/spotify-youtube-clone"
+          video="/assets/spotify-clone-demo.mp4"
+          poster="/assets/spotify-clone-poster.jpg"
+        />
       </div>
     </section>
   )
