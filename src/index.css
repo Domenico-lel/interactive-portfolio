@@ -778,6 +778,12 @@ button {
   .card--showcase {
     padding: 2rem 0;
   }
+  .card--macbook {
+    padding-inline: 0.5rem;
+  }
+  .macbook {
+    width: min(620px, 104%);
+  }
   .phone {
     width: min(220px, 68%);
   }
